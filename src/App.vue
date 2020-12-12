@@ -1,20 +1,6 @@
 <template>
   <section class="catalog">
-    <ul class="catalog__list">
-      <li class="catalog__item" v-for="(product, index) in products" :key="index">
-        <a class="catalog__pic" href="#">
-          <img :src="product.image" :alt="product.name">
-        </a>
-
-        <h3 class="catalog__title">
-          <a href="#">
-            {{ product.name }}
-          </a>
-        </h3>
-
-        <span class="catalog__price">{{ product.price }} ₽</span>
-      </li>
-    </ul>
+    <ProductList :products="products" />
 
     <ul class="catalog__pagination pagination">
       <li class="pagination__item">
@@ -71,10 +57,12 @@
 </template>
 
 <script>
+import ProductList from './components/products/ProductList';
 import products from './data/products';
 
 export default {
   name: 'App',
+  components: { ProductList },
   data() {
     return {
       products,
