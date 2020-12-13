@@ -2,67 +2,18 @@
   <section class="catalog">
     <ProductList :products="products" />
 
-    <ul class="catalog__pagination pagination">
-      <li class="pagination__item">
-        <a
-            class="pagination__link pagination__link--arrow pagination__link--disabled"
-            aria-label="Предыдущая страница">
-          <svg width="8" height="14" fill="currentColor">
-            <use xlink:href="#icon-arrow-left"></use>
-          </svg>
-        </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link pagination__link--current">
-          1
-        </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#">
-          2
-        </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#">
-          3
-        </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#">
-          4
-        </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#">
-          ...
-        </a>
-      </li>
-      <li class="pagination__item">
-        <a class="pagination__link" href="#">
-          10
-        </a>
-      </li>
-      <li class="pagination__item">
-        <a
-            class="pagination__link pagination__link--arrow"
-            href="#"
-            aria-label="Следующая страница">
-          <svg width="8" height="14" fill="currentColor">
-            <use xlink:href="#icon-arrow-right"></use>
-          </svg>
-        </a>
-      </li>
-    </ul>
+    <BasePagination v-model:page="page" :count="countProducts" :per-page="perPage"/>
   </section>
 </template>
 
 <script>
+import BasePagination from '@/components/BasePagination';
 import ProductList from './components/products/ProductList';
 import products from './data/products';
 
 export default {
   name: 'App',
-  components: { ProductList },
+  components: { BasePagination, ProductList },
   data() {
     return {
       page: 1,
@@ -74,6 +25,9 @@ export default {
       const offset = (this.page - 1) * this.perPage;
 
       return products.slice(offset, offset + this.perPage);
+    },
+    countProducts() {
+      return products.length;
     },
   },
 };
