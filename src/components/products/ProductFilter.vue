@@ -144,7 +144,7 @@
 import categories from '@/data/categories';
 
 export default {
-  props: ['priceFrom', 'priceTo', 'categoryId'],
+  props: ['priceFrom', 'priceTo', 'categoryId', 'color'],
   data() {
     return {
       currentPriceFrom: 0,
@@ -168,7 +168,7 @@ export default {
     categoryId(value) {
       this.currentCategoryId = value;
     },
-    currentColor(value) {
+    color(value) {
       this.currentColor = value;
     },
   },
