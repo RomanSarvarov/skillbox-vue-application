@@ -5,6 +5,7 @@ export default [
     image: '/img/radio.jpg',
     price: 3690,
     categoryId: 4,
+    color: '#73b6ea',
   },
   {
     id: 2,
@@ -12,6 +13,7 @@ export default [
     image: '/img/toothbrush.jpg',
     price: 5660,
     categoryId: 1,
+    color: '#ffffff',
   },
   {
     id: 3,
@@ -19,6 +21,7 @@ export default [
     image: '/img/phone.jpg',
     price: 21790,
     categoryId: 2,
+    color: '#ffbe15',
   },
   {
     id: 4,
@@ -26,6 +29,7 @@ export default [
     image: '/img/board.jpg',
     price: 24690,
     categoryId: 3,
+    color: '#000000',
   },
   {
     id: 5,
@@ -33,6 +37,7 @@ export default [
     image: '/img/phone-2.jpg',
     price: 14960,
     categoryId: 2,
+    color: '#000000',
   },
   {
     id: 6,
@@ -40,6 +45,7 @@ export default [
     image: '/img/phone-3.jpg',
     price: 8960,
     categoryId: 2,
+    color: '#000000',
   },
   {
     id: 7,
@@ -47,6 +53,7 @@ export default [
     image: '/img/bicycle.jpg',
     price: 39900,
     categoryId: 3,
+    color: '#8be000',
   },
   {
     id: 8,
@@ -54,6 +61,7 @@ export default [
     image: '/img/wheels.jpg',
     price: 34900,
     categoryId: 3,
+    color: '#939393',
   },
   {
     id: 9,
@@ -61,6 +69,7 @@ export default [
     image: '/img/scooter.jpg',
     price: 4990,
     categoryId: 3,
+    color: '#939393',
   },
   {
     id: 10,
@@ -68,6 +77,7 @@ export default [
     image: '/img/ripstik.jpg',
     price: 6690,
     categoryId: 3,
+    color: '#000000',
   },
   {
     id: 11,
@@ -75,6 +85,7 @@ export default [
     image: '/img/airpods.jpg',
     price: 16560,
     categoryId: 5,
+    color: '#ffffff',
   },
   {
     id: 12,
@@ -82,5 +93,6 @@ export default [
     image: '/img/headphones.jpg',
     price: 30690,
     categoryId: 5,
+    color: '#000000',
   },
 ];
