@@ -71,7 +71,9 @@ export default {
 
       if (this.filterData.color !== null) {
         filteredProducts = filteredProducts.filter(
-          (product) => product.color === this.filterData.color,
+          (product) => product.colors.findIndex(
+            (color) => color.code === this.filterData.color,
+          ) !== -1,
         );
       }
 

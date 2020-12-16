@@ -43,88 +43,16 @@
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">
-          <li class="colors__item">
+          <li class="colors__item" v-for="color in colors" :key="color.id">
             <label class="colors__label">
               <input
                   class="colors__radio sr-only"
                   type="radio"
                   name="color"
-                  value="#73b6ea"
+                  :value="color.code"
                   v-model="currentColor"
               />
-              <span class="colors__value" style="background-color: #73b6ea;"></span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                name="color"
-                value="#ffbe15"
-                v-model="currentColor"
-              />
-              <span class="colors__value" style="background-color: #FFBE15;"></span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                name="color"
-                value="#939393"
-                v-model="currentColor"
-              />
-              <span class="colors__value" style="background-color: #939393;"></span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                name="color"
-                value="#8be000"
-                v-model="currentColor"
-              />
-              <span class="colors__value" style="background-color: #8be000;"></span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                name="color"
-                value="#ff6b00"
-                v-model="currentColor"
-              />
-              <span class="colors__value" style="background-color: #FF6B00;"></span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                name="color"
-                value="#ffffff"
-                v-model="currentColor"
-              />
-              <span class="colors__value" style="background-color: #ffffff;"></span>
-            </label>
-          </li>
-          <li class="colors__item">
-            <label class="colors__label">
-              <input
-                class="colors__radio sr-only"
-                type="radio"
-                name="color"
-                value="#000000"
-                v-model="currentColor"
-              />
-              <span class="colors__value" style="background-color: #000000;"></span>
+              <span class="colors__value" :style="'background-color: ' + color.code + ';'"></span>
             </label>
           </li>
         </ul>
@@ -142,6 +70,7 @@
 
 <script>
 import categories from '@/data/categories';
+import colors from '@/data/colors';
 
 export default {
   props: ['priceFrom', 'priceTo', 'categoryId', 'color'],
@@ -156,6 +85,9 @@ export default {
   computed: {
     categories() {
       return categories;
+    },
+    colors() {
+      return colors;
     },
   },
   watch: {

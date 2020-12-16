@@ -5,7 +5,18 @@ export default [
     image: '/img/radio.jpg',
     price: 3690,
     categoryId: 4,
-    color: '#73b6ea',
+    colors: [
+      {
+        id: 1,
+        title: 'Синий',
+        code: '#73b6ea',
+      },
+      {
+        id: 2,
+        title: 'Зеленый',
+        code: '#8be000',
+      },
+    ],
   },
   {
     id: 2,
@@ -13,7 +24,23 @@ export default [
     image: '/img/toothbrush.jpg',
     price: 5660,
     categoryId: 1,
-    color: '#ffffff',
+    colors: [
+      {
+        id: 3,
+        title: 'Белый',
+        code: '#ffffff',
+      },
+      {
+        id: 4,
+        title: 'Желтый',
+        code: '#ffbe15',
+      },
+      {
+        id: 5,
+        title: 'Чёрный',
+        code: '#000000',
+      },
+    ],
   },
   {
     id: 3,
@@ -21,7 +48,18 @@ export default [
     image: '/img/phone.jpg',
     price: 21790,
     categoryId: 2,
-    color: '#ffbe15',
+    colors: [
+      {
+        id: 3,
+        title: 'Белый',
+        code: '#ffffff',
+      },
+      {
+        id: 4,
+        title: 'Желтый',
+        code: '#ffbe15',
+      },
+    ],
   },
   {
     id: 4,
@@ -29,7 +67,18 @@ export default [
     image: '/img/board.jpg',
     price: 24690,
     categoryId: 3,
-    color: '#000000',
+    colors: [
+      {
+        id: 5,
+        title: 'Черный',
+        code: '#000000',
+      },
+      {
+        id: 6,
+        title: 'Оранжевый',
+        code: '#ff6b00',
+      },
+    ],
   },
   {
     id: 5,
@@ -37,7 +86,18 @@ export default [
     image: '/img/phone-2.jpg',
     price: 14960,
     categoryId: 2,
-    color: '#000000',
+    colors: [
+      {
+        id: 5,
+        title: 'Черный',
+        code: '#000000',
+      },
+      {
+        id: 4,
+        title: 'Желтый',
+        code: '#ffbe15',
+      },
+    ],
   },
   {
     id: 6,
@@ -45,7 +105,18 @@ export default [
     image: '/img/phone-3.jpg',
     price: 8960,
     categoryId: 2,
-    color: '#000000',
+    colors: [
+      {
+        id: 5,
+        title: 'Черный',
+        code: '#000000',
+      },
+      {
+        id: 4,
+        title: 'Желтый',
+        code: '#ffbe15',
+      },
+    ],
   },
   {
     id: 7,
@@ -53,7 +124,18 @@ export default [
     image: '/img/bicycle.jpg',
     price: 39900,
     categoryId: 3,
-    color: '#8be000',
+    colors: [
+      {
+        id: 2,
+        title: 'Зеленый',
+        code: '#8be000',
+      },
+      {
+        id: 4,
+        title: 'Желтый',
+        code: '#ffbe15',
+      },
+    ],
   },
   {
     id: 8,
@@ -61,7 +143,18 @@ export default [
     image: '/img/wheels.jpg',
     price: 34900,
     categoryId: 3,
-    color: '#939393',
+    colors: [
+      {
+        id: 7,
+        title: 'Серый',
+        code: '#939393',
+      },
+      {
+        id: 5,
+        title: 'Черный',
+        code: '#000000',
+      },
+    ],
   },
   {
     id: 9,
@@ -69,7 +162,18 @@ export default [
     image: '/img/scooter.jpg',
     price: 4990,
     categoryId: 3,
-    color: '#939393',
+    colors: [
+      {
+        id: 7,
+        title: 'Серый',
+        code: '#939393',
+      },
+      {
+        id: 6,
+        title: 'Оранжевый',
+        code: '#ff6b00',
+      },
+    ],
   },
   {
     id: 10,
@@ -77,7 +181,13 @@ export default [
     image: '/img/ripstik.jpg',
     price: 6690,
     categoryId: 3,
-    color: '#000000',
+    colors: [
+      {
+        id: 5,
+        title: 'Черный',
+        code: '#000000',
+      },
+    ],
   },
   {
     id: 11,
@@ -85,7 +195,13 @@ export default [
     image: '/img/airpods.jpg',
     price: 16560,
     categoryId: 5,
-    color: '#ffffff',
+    colors: [
+      {
+        id: 3,
+        title: 'Белый',
+        code: '#ffffff',
+      },
+    ],
   },
   {
     id: 12,
@@ -93,6 +209,12 @@ export default [
     image: '/img/headphones.jpg',
     price: 30690,
     categoryId: 5,
-    color: '#000000',
+    colors: [
+      {
+        id: 5,
+        title: 'Черный',
+        code: '#000000',
+      },
+    ],
   },
 ];
