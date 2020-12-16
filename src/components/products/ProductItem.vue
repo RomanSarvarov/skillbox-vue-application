@@ -12,14 +12,15 @@
 
     <span class="catalog__price">{{ product.price }} ₽</span>
 
-    <ProductColors :colors="product.colors" />
+    <ProductColors v-model:current-color="color" :colors="product.colors" classes="colors--black" />
   </li>
 </template>
 
 <script>
-import ProductColors from "./ProductColors";
+import ProductColors from './ProductColors';
+
 export default {
-  components: {ProductColors},
+  components: { ProductColors },
   props: ['product'],
   data() {
     return {

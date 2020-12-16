@@ -1,5 +1,5 @@
 <template>
-  <ul class="colors colors--black">
+  <ul class="colors" :class="classes">
     <li class="colors__item" v-for="color in colors" :key="color.id">
       <label class="colors__label">
         <input
@@ -16,11 +16,16 @@
 
 <script>
 export default {
-  props: ['colors'],
-  data() {
-    return {
-      selected: null,
-    };
+  props: ['currentColor', 'colors', 'classes'],
+  computed: {
+    selected: {
+      set(colorCode) {
+        this.$emit('update:currentColor', colorCode);
+      },
+      get() {
+        return this.currentColor;
+      },
+    },
   },
 };
 </script>

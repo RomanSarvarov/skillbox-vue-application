@@ -42,20 +42,8 @@
 
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
-        <ul class="colors">
-          <li class="colors__item" v-for="color in colors" :key="color.id">
-            <label class="colors__label">
-              <input
-                  class="colors__radio sr-only"
-                  type="radio"
-                  name="color"
-                  :value="color.code"
-                  v-model="currentColor"
-              />
-              <span class="colors__value" :style="'background-color: ' + color.code + ';'"></span>
-            </label>
-          </li>
-        </ul>
+
+        <ProductColors :colors="colors" v-model:current-color="currentColor" />
       </fieldset>
 
       <button class="filter__submit button button--primery" type="submit">
@@ -71,8 +59,12 @@
 <script>
 import categories from '@/data/categories';
 import colors from '@/data/colors';
+import ProductColors from '@/components/products/ProductColors';
 
 export default {
+  components: {
+    ProductColors,
+  },
   props: ['priceFrom', 'priceTo', 'categoryId', 'color'],
   data() {
     return {
@@ -105,14 +97,19 @@ export default {
     },
   },
   methods: {
-    apply(reset = false) {
-      this.$emit('update:priceFrom', reset ? 0 : this.currentPriceFrom);
-      this.$emit('update:priceTo', reset ? 0 : this.currentPriceTo);
-      this.$emit('update:categoryId', reset ? 0 : this.currentCategoryId);
-      this.$emit('update:color', reset ? null : this.currentColor);
+    apply() {
+      this.$emit('update:priceFrom', this.currentPriceFrom);
+      this.$emit('update:priceTo', this.currentPriceTo);
+      this.$emit('update:categoryId', this.currentCategoryId);
+      this.$emit('update:color', this.currentColor);
     },
     reset() {
-      this.apply(true);
+      this.currentPriceFrom = 0;
+      this.currentPriceTo = 0;
+      this.currentCategoryId = 0;
+      this.currentColor = null;
+
+      this.apply();
     },
   },
 };
