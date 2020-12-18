@@ -12,7 +12,11 @@
 
     <span class="catalog__price">{{ product.price }} ₽</span>
 
-    <ProductColors v-model:current-color="color" :colors="product.colors" classes="colors--black" />
+    <ProductColors
+      v-model:current-color="color"
+      :colors="product.colors"
+      class="colors--black"
+    />
   </li>
 </template>
 
