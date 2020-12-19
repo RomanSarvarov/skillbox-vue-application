@@ -3,18 +3,18 @@
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="index.html">
+          <a class="breadcrumbs__link" href="#" @click.prevent="this.navigate('main')">
             Каталог
           </a>
         </li>
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="#">
-            Мобильный транспорт
+          <a class="breadcrumbs__link" href="#" @click.prevent="this.navigate('main')">
+            {{ category.name }}
           </a>
         </li>
         <li class="breadcrumbs__item">
           <a class="breadcrumbs__link">
-            Смартфон Xiaomi Mi Mix 3 6/128GB
+            {{ product.name }}
           </a>
         </li>
       </ul>
@@ -23,41 +23,19 @@
     <section class="item">
       <div class="item__pics pics">
         <div class="pics__wrapper">
-          <img width="570" height="570" src="img/phone-square.jpg" srcset="img/phone-square@2x.jpg 2x" alt="Название товара">
+          <img width="570" height="570" :src="product.image" :alt="product.name">
         </div>
-        <ul class="pics__list">
-          <li class="pics__item">
-            <a href="" class="pics__link pics__link--current">
-              <img width="98" height="98" src="img/phone-square-1.jpg" srcset="img/phone-square-1@2x.jpg 2x" alt="Название товара">
-            </a>
-          </li>
-          <li class="pics__item">
-            <a href="" class="pics__link">
-              <img width="98" height="98" src="img/phone-square-2.jpg" srcset="img/phone-square-2@2x.jpg 2x" alt="Название товара">
-            </a>
-          </li>
-          <li class="pics__item">
-            <a href="" class="pics__link">
-              <img width="98" height="98" src="img/phone-square-3.jpg" srcset="img/phone-square-3@2x.jpg 2x" alt="Название товара">
-            </a>
-          </li>
-          <li class="pics__item">
-            <a class="pics__link" href="#">
-              <img width="98" height="98" src="img/phone-square-4.jpg" srcset="img/phone-square-4@2x.jpg 2x" alt="Название товара">
-            </a>
-          </li>
-        </ul>
       </div>
 
       <div class="item__info">
-        <span class="item__code">Артикул: 150030</span>
+        <span class="item__code">Артикул: {{ product.id }}</span>
         <h2 class="item__title">
-          Смартфон Xiaomi Mi Mix 3 6/128GB
+          {{ product.name }}
         </h2>
         <div class="item__form">
           <form class="form" action="#" method="POST">
             <b class="item__price">
-              18 990 ₽
+              {{ this.numberFormat.price(product.price) }} ₽
             </b>
 
             <fieldset class="form__block">
@@ -197,12 +175,16 @@
 
 <script>
 import products from '@/data/products';
+import categories from '@/data/categories';
 
 export default {
   props: ['pageParams'],
   computed: {
     product() {
       return products.find((product) => product.id === this.pageParams.id);
+    },
+    category() {
+      return categories.find((category) => category.id === this.product.categoryId);
     },
   },
 };

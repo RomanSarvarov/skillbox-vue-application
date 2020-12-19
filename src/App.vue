@@ -25,12 +25,6 @@ export default {
       return routes[this.currentPage] || 'NotFoundPage';
     },
   },
-  methods: {
-    navigate(page, params = {}) {
-      this.currentPage = page;
-      this.currentPageParams = params;
-    },
-  },
   created() {
     this.emitter.on('navigate', (data) => {
       this.currentPage = data.page;

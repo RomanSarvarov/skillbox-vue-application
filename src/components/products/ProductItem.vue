@@ -1,6 +1,6 @@
 <template>
   <li class="catalog__item">
-    <a class="catalog__pic" href="#" @click.prevent="navigate('product', {id: product.id})">
+    <a class="catalog__pic" href="#" @click.prevent="this.navigate('product', {id: product.id})">
       <img :src="product.image" :alt="product.name">
     </a>
 
@@ -10,7 +10,7 @@
       </a>
     </h3>
 
-    <span class="catalog__price">{{ product.price }} ₽</span>
+    <span class="catalog__price">{{ this.numberFormat.price(product.price) }} ₽</span>
 
     <ProductColors
       v-model:current-color="color"
@@ -30,11 +30,6 @@ export default {
     return {
       color: '#7386ea',
     };
-  },
-  methods: {
-    navigate(page, params) {
-      this.emitter.emit('navigate', { page, params });
-    },
   },
 };
 </script>
