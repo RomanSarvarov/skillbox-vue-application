@@ -196,7 +196,14 @@
 </template>
 
 <script>
+import products from '@/data/products';
+
 export default {
   props: ['pageParams'],
+  computed: {
+    product() {
+      return products.find((product) => product.id === this.pageParams.id);
+    },
+  },
 };
 </script>

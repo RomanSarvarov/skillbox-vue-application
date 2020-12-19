@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     navigate(page, params) {
-      this.emitter.emit('navigate', page, params);
+      this.emitter.emit('navigate', { page, params });
     },
   },
 };

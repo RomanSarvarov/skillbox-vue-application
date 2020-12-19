@@ -17,9 +17,7 @@ export default {
   data() {
     return {
       currentPage: 'main',
-      currentPageParams: {
-
-      },
+      currentPageParams: {},
     };
   },
   computed: {
@@ -34,9 +32,9 @@ export default {
     },
   },
   created() {
-    this.emitter.on('navigate', (page, params) => {
-      this.currentPage = page;
-      this.currentPageParams = params;
+    this.emitter.on('navigate', (data) => {
+      this.currentPage = data.page;
+      this.currentPageParams = data.params || {};
     });
   },
 };
