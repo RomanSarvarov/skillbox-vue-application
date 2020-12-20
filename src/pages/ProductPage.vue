@@ -3,12 +3,12 @@
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <RouterLink class="breadcrumbs__link" href="#" :to="{ name: 'main' }">
+          <RouterLink class="breadcrumbs__link" :to="{ name: 'main' }">
             Каталог
           </RouterLink>
         </li>
         <li class="breadcrumbs__item">
-          <RouterLink class="breadcrumbs__link" href="#" :to="{ name: 'main' }">
+          <RouterLink class="breadcrumbs__link" :to="{ name: 'main' }">
             {{ category.name }}
           </RouterLink>
         </li>
