@@ -1,9 +1,18 @@
 <template>
-  <RouterView />
+  <div>
+    <BaseHeader />
+
+    <RouterView />
+
+    <BaseFooter />
+  </div>
 </template>
 
 <script>
-export default {
+import BaseHeader from '@/components/BaseHeader';
+import BaseFooter from '@/components/BaseFooter';
 
+export default {
+  components: { BaseFooter, BaseHeader },
 };
 </script>
