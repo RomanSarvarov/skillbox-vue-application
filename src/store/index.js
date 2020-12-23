@@ -5,10 +5,24 @@ const store = createStore({
     cart: {
       products: [
         {
-          productId: 1,
+          id: 1,
           amount: 4,
         },
       ],
+    },
+  },
+  mutations: {
+    addProductToCart(state, { productId, amount }) {
+      const alreadyExistProduct = state.cart.products.find(
+        (product) => product.id === productId,
+      );
+
+      if (alreadyExistProduct) {
+        alreadyExistProduct.amount += 1;
+        return;
+      }
+
+      state.cart.products.push({ id: productId, amount });
     },
   },
 });

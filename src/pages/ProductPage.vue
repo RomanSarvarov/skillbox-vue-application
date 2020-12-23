@@ -33,7 +33,7 @@
           {{ product.name }}
         </h2>
         <div class="item__form">
-          <form class="form" action="#" method="POST">
+          <form class="form" method="POST" @submit.prevent="addToCart">
             <b class="item__price">
               {{ this.numberFormat.price(product.price) }} ₽
             </b>
@@ -41,20 +41,23 @@
             <fieldset class="form__block">
               <legend class="form__legend">Цвет:</legend>
 
-              <ProductColors :colors="product.colors" />
+              <ProductColors
+                  :colors="product.colors"
+                  v-model:current-color="color"
+              />
             </fieldset>
 
             <div class="item__row">
               <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар">
+                <button type="button" aria-label="Убрать один товар" @click.prevent="decreaseAmount">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
                 </button>
 
-                <input type="text" value="1" name="count">
+                <input type="text" v-model.number="amount" name="count" />
 
-                <button type="button" aria-label="Добавить один товар">
+                <button type="button" aria-label="Добавить один товар" @click.prevent="increaseAmount">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-plus"></use>
                   </svg>
@@ -129,13 +132,41 @@ import ProductColors from '@/components/products/ProductColors';
 
 export default {
   components: { ProductColors },
-  props: ['pageParams'],
+  data() {
+    return {
+      color: null,
+      amount: 1,
+    };
+  },
   computed: {
     product() {
       return products.find((product) => product.id === +this.$route.params.id);
     },
     category() {
       return categories.find((category) => category.id === this.product.categoryId);
+    },
+  },
+  methods: {
+    increaseAmount() {
+      this.amount += 1;
+    },
+    decreaseAmount() {
+      if (this.amount > 1) {
+        this.amount -= 1;
+      }
+    },
+    addToCart() {
+      this.$store.commit(
+        'addProductToCart',
+        { productId: this.product.id, amount: this.amount },
+      );
+    },
+  },
+  watch: {
+    amount() {
+      if (this.amount <= 0) {
+        this.amount = 1;
+      }
     },
   },
 };
