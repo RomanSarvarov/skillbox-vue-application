@@ -10,7 +10,7 @@
       </a>
     </h3>
 
-    <span class="catalog__price">{{ this.numberFormat.price(product.price) }} ₽</span>
+    <span class="catalog__price">{{ numberFormat.price(product.price) }} ₽</span>
 
     <ProductColors
       v-model:current-color="color"

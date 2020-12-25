@@ -35,7 +35,7 @@
         <div class="item__form">
           <form class="form" method="POST" @submit.prevent="addToCart">
             <b class="item__price">
-              {{ this.numberFormat.price(product.price) }} ₽
+              {{ numberFormat.price(product.price) }} ₽
             </b>
 
             <fieldset class="form__block">
