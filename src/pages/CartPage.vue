@@ -26,52 +26,11 @@
       <form class="cart__form form" action="#" method="POST">
         <div class="cart__field">
           <ul class="cart__list">
-            <li class="cart__item product" v-for="cartProduct in cartProducts" :key="cartProduct.productId">
-              <div class="product__pic">
-                <img
-                  :src="cartProduct.product.image"
-                  width="120"
-                  height="120"
-                  :alt="cartProduct.product.name"
-                />
-              </div>
-              <h3 class="product__title">
-                {{ cartProduct.product.name }}
-              </h3>
-              <span class="product__code">
-                Артикул: {{ cartProduct.productId }}
-              </span>
-
-              <div class="product__counter form__counter">
-                <button
-                  type="button"
-                  aria-label="Убрать один товар">
-                  <svg width="10" height="10" fill="currentColor">
-                    <use xlink:href="#icon-minus"></use>
-                  </svg>
-                </button>
-
-                <input type="text" :value="cartProduct.amount" name="count" />
-
-                <button
-                  type="button"
-                  aria-label="Добавить один товар">
-                  <svg width="10" height="10" fill="currentColor">
-                    <use xlink:href="#icon-plus"></use>
-                  </svg>
-                </button>
-              </div>
-
-              <b class="product__price">
-                {{ numberFormat.price(cartProduct.product.price * cartProduct.amount) }} ₽
-              </b>
-
-              <button class="product__del button-del" type="button" aria-label="Удалить товар из корзины">
-                <svg width="20" height="20" fill="currentColor">
-                  <use xlink:href="#icon-close"></use>
-                </svg>
-              </button>
-            </li>
+            <CartItem
+              v-for="cartProduct in cartProducts"
+              :cart-product="cartProduct"
+              :key="cartProduct.productId"
+            />
           </ul>
         </div>
 
@@ -94,8 +53,10 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import CartItem from '@/components/cart/CartItem';
 
 export default {
+  components: { CartItem },
   computed: {
     ...mapGetters({
       cartProducts: 'cartDetailProducts',

@@ -25,6 +25,26 @@ const store = createStore({
 
       state.cart.products.push({ productId, amount });
     },
+    cartItemUpdateAmount(state, { productId, amount }) {
+      // Если количество товаров 0 и меньше - удалить его из корзины.
+      if (amount < 1) {
+        this.commit('cartItemDelete', productId);
+        return;
+      }
+
+      const item = state.cart.products.find(
+        (cartProduct) => cartProduct.productId === productId,
+      );
+
+      if (item) {
+        item.amount = amount;
+      }
+    },
+    cartItemDelete(state, productId) {
+      state.cart.products = state.cart.products.filter(
+        (item) => item.productId !== productId,
+      );
+    },
   },
   getters: {
     cartDetailProducts(state) {
