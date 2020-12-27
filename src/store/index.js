@@ -19,7 +19,7 @@ const store = createStore({
       );
 
       if (alreadyExistProduct) {
-        alreadyExistProduct.amount += 1;
+        alreadyExistProduct.amount += amount;
         return;
       }
 
