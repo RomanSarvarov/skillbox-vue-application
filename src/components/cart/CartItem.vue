@@ -15,27 +15,7 @@
       Артикул: {{ cartProduct.productId }}
     </span>
 
-    <div class="product__counter form__counter">
-      <button
-          type="button"
-          aria-label="Убрать один товар"
-          @click="decreaseAmount">
-        <svg width="10" height="10" fill="currentColor">
-          <use xlink:href="#icon-minus"></use>
-        </svg>
-      </button>
-
-      <input type="text" v-model.number="amount" name="count" />
-
-      <button
-          type="button"
-          aria-label="Добавить один товар"
-          @click="increaseAmount">
-        <svg width="10" height="10" fill="currentColor">
-          <use xlink:href="#icon-plus"></use>
-        </svg>
-      </button>
-    </div>
+    <ProductAmount v-model="amount" class="product__counter" />
 
     <b class="product__price">
       {{ numberFormat.price(cartProduct.product.price * cartProduct.amount) }} ₽
@@ -55,8 +35,10 @@
 
 <script>
 import { mapMutations } from 'vuex';
+import ProductAmount from '@/components/products/ProductAmount';
 
 export default {
+  components: { ProductAmount },
   props: ['cartProduct'],
   computed: {
     amount: {
@@ -73,13 +55,6 @@ export default {
   },
   methods: {
     ...mapMutations({ itemDelete: 'cartItemDelete' }),
-
-    increaseAmount() {
-      this.amount += 1;
-    },
-    decreaseAmount() {
-      this.amount -= 1;
-    },
   },
 };
 </script>

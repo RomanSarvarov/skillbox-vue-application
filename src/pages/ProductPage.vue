@@ -48,21 +48,7 @@
             </fieldset>
 
             <div class="item__row">
-              <div class="form__counter">
-                <button type="button" aria-label="Убрать один товар" @click.prevent="decreaseAmount">
-                  <svg width="12" height="12" fill="currentColor">
-                    <use xlink:href="#icon-minus"></use>
-                  </svg>
-                </button>
-
-                <input type="text" v-model.number="amount" name="count" />
-
-                <button type="button" aria-label="Добавить один товар" @click.prevent="increaseAmount">
-                  <svg width="12" height="12" fill="currentColor">
-                    <use xlink:href="#icon-plus"></use>
-                  </svg>
-                </button>
-              </div>
+              <ProductAmount v-model="amount" :svg-size="12" />
 
               <button class="button button--primery" type="submit">
                 В корзину
@@ -129,9 +115,10 @@
 import products from '@/data/products';
 import categories from '@/data/categories';
 import ProductColors from '@/components/products/ProductColors';
+import ProductAmount from '@/components/products/ProductAmount';
 
 export default {
-  components: { ProductColors },
+  components: { ProductAmount, ProductColors },
   data() {
     return {
       color: null,
@@ -147,26 +134,11 @@ export default {
     },
   },
   methods: {
-    increaseAmount() {
-      this.amount += 1;
-    },
-    decreaseAmount() {
-      if (this.amount > 1) {
-        this.amount -= 1;
-      }
-    },
     addToCart() {
       this.$store.commit(
         'addProductToCart',
         { productId: this.product.id, amount: this.amount },
       );
-    },
-  },
-  watch: {
-    amount() {
-      if (this.amount <= 0) {
-        this.amount = 1;
-      }
     },
   },
 };
