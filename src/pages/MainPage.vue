@@ -27,15 +27,16 @@
 </template>
 
 <script>
+import axios from 'axios';
 import ProductFilter from '@/components/products/ProductFilter';
 import BasePagination from '@/components/BasePagination';
 import ProductList from '@/components/products/ProductList';
-import products from '@/data/products';
 
 export default {
   components: { ProductFilter, BasePagination, ProductList },
   data() {
     return {
+      productsData: null,
       page: 1,
       perPage: 3,
       filterData: {
@@ -48,7 +49,7 @@ export default {
   },
   computed: {
     filteredProducts() {
-      let filteredProducts = products;
+      let filteredProducts = this.products;
 
       if (this.filterData.priceFrom > 0) {
         filteredProducts = filteredProducts.filter(
@@ -79,13 +80,40 @@ export default {
       return filteredProducts;
     },
     products() {
-      const offset = (this.page - 1) * this.perPage;
+      if (this.productsData) {
+        const products = this.productsData.items.map((product) => ({
+          ...product,
+          image: product.image.file.url,
+        }));
 
-      return this.filteredProducts.slice(offset, offset + this.perPage);
+        return products;
+      }
+
+      return [];
     },
     countProducts() {
-      return this.filteredProducts.length;
+      return this.productsData ? this.productsData.pagination.total : 0;
     },
+  },
+  watch: {
+    page() {
+      this.loadProducts();
+    },
+  },
+  methods: {
+    async loadProducts() {
+      const response = await axios.get('https://vue-study.dev.creonit.ru/api/products', {
+        params: {
+          page: this.page,
+          limit: this.perPage,
+        },
+      });
+
+      this.productsData = response.data;
+    },
+  },
+  created() {
+    this.loadProducts();
   },
 };
 </script>
