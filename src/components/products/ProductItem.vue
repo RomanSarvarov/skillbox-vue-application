@@ -1,8 +1,8 @@
 <template>
   <li class="catalog__item">
-    <a class="catalog__pic" href="#" @click.prevent="this.navigate('product', {id: product.id})">
+    <RouterLink :to="{ name: 'product', params: { id: product.id } }" class="catalog__pic">
       <img :src="product.image" :alt="product.name">
-    </a>
+    </RouterLink>
 
     <h3 class="catalog__title">
       <a href="#">
@@ -10,7 +10,7 @@
       </a>
     </h3>
 
-    <span class="catalog__price">{{ this.numberFormat.price(product.price) }} ₽</span>
+    <span class="catalog__price">{{ numberFormat.price(product.price) }} ₽</span>
 
     <ProductColors
       v-model:current-color="color"
