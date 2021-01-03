@@ -48,37 +48,6 @@ export default {
     };
   },
   computed: {
-    filteredProducts() {
-      let filteredProducts = this.products;
-
-      if (this.filterData.priceFrom > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price >= this.filterData.priceFrom,
-        );
-      }
-
-      if (this.filterData.priceTo > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price <= this.filterData.priceTo,
-        );
-      }
-
-      if (this.filterData.categoryId > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.categoryId === this.filterData.categoryId,
-        );
-      }
-
-      if (this.filterData.color !== null) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.colors.findIndex(
-            (color) => color.code === this.filterData.color,
-          ) !== -1,
-        );
-      }
-
-      return filteredProducts;
-    },
     products() {
       if (this.productsData) {
         const products = this.productsData.items.map((product) => ({
@@ -94,18 +63,34 @@ export default {
     countProducts() {
       return this.productsData ? this.productsData.pagination.total : 0;
     },
+    filtration() {
+      return {
+        categoryId: this.filterData.categoryId > 0 ? this.filterData.categoryId : null,
+        minPrice: this.filterData.priceFrom,
+        maxPrice: this.filterData.priceTo >= this.filterData.priceFrom ? this.filterData.priceTo : null,
+      };
+    },
+    pagination() {
+      return {
+        page: this.page,
+        limit: this.perPage,
+      };
+    },
   },
   watch: {
-    page() {
+    pagination() {
+      this.loadProducts();
+    },
+    filtration() {
       this.loadProducts();
     },
   },
   methods: {
     async loadProducts() {
-      const response = await axios.get('https://vue-study.dev.creonit.ru/api/products', {
+      const response = await axios.get(`${this.appConstants.API_BASE_URL}/api/products`, {
         params: {
-          page: this.page,
-          limit: this.perPage,
+          ...this.filtration,
+          ...this.pagination,
         },
       });
 
