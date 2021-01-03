@@ -1,11 +1,11 @@
 <template>
-  <main class="content container">
+  <main class="content container" :class="{ 'page-loading': pageLoading }">
     <div class="content__top content__top--catalog">
       <h1 class="content__title">
         Каталог
       </h1>
       <span class="content__info">
-        152 товара
+        {{ productCount }} товар(-ов)
       </span>
     </div>
 
@@ -18,7 +18,11 @@
       />
 
       <section class="catalog">
-        <ProductList :products="products" />
+        <p v-if="pageLoadingFailed">
+          Ошибка загрузки
+          <button @click.prevent="loadProducts">Попробовать ещё раз</button>
+        </p>
+        <ProductList :products="products" v-else />
 
         <BasePagination v-model:page="page" :count="countProducts" :per-page="perPage"/>
       </section>
@@ -28,6 +32,7 @@
 
 <script>
 import axios from 'axios';
+import config from '@/config';
 import ProductFilter from '@/components/products/ProductFilter';
 import BasePagination from '@/components/BasePagination';
 import ProductList from '@/components/products/ProductList';
@@ -45,6 +50,8 @@ export default {
         categoryId: 0,
         color: null,
       },
+      pageLoading: false,
+      pageLoadingFailed: false,
     };
   },
   computed: {
@@ -76,6 +83,9 @@ export default {
         limit: this.perPage,
       };
     },
+    productCount() {
+      return this.productsData ? this.productsData.pagination.total : 0;
+    },
   },
   watch: {
     pagination() {
@@ -87,14 +97,24 @@ export default {
   },
   methods: {
     async loadProducts() {
-      const response = await axios.get(`${this.appConstants.API_BASE_URL}/api/products`, {
-        params: {
-          ...this.filtration,
-          ...this.pagination,
-        },
-      });
+      this.pageLoading = true;
+      this.pageLoadingFailed = false;
 
-      this.productsData = response.data;
+      try {
+        const response = await axios.get(`${config.API_URL}/api/products`, {
+          params: {
+            ...this.filtration,
+            ...this.pagination,
+          },
+        });
+
+        this.productsData = response.data;
+      } catch (e) {
+        console.log(e);
+        this.pageLoadingFailed = true;
+      } finally {
+        this.pageLoading = false;
+      }
     },
   },
   created() {
@@ -102,3 +122,10 @@ export default {
   },
 };
 </script>
+
+<style>
+.page-loading {
+  opacity: .7;
+  pointer-events: none;
+}
+</style>

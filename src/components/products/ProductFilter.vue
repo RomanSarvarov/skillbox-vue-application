@@ -58,6 +58,7 @@
 
 <script>
 import axios from 'axios';
+import config from '@/config';
 import colors from '@/data/colors';
 import ProductColors from '@/components/products/ProductColors';
 
@@ -113,7 +114,7 @@ export default {
       this.apply();
     },
     async loadCategories() {
-      const response = await axios.get(`${this.appConstants.API_BASE_URL}/api/productCategories`);
+      const response = await axios.get(`${config.API_URL}/api/productCategories`);
 
       this.categoriesData = response.data;
     },
