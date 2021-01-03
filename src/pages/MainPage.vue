@@ -1,5 +1,5 @@
 <template>
-  <main class="content container" :class="{ 'page-loading': pageLoading }">
+  <main class="content container">
     <div class="content__top content__top--catalog">
       <h1 class="content__title">
         Каталог
@@ -18,7 +18,7 @@
       />
 
       <section class="catalog">
-        <p v-if="pageLoadingFailed">
+        <p v-if="isPageLoadFailed">
           Ошибка загрузки
           <button @click.prevent="loadProducts">Попробовать ещё раз</button>
         </p>
@@ -33,12 +33,14 @@
 <script>
 import axios from 'axios';
 import config from '@/config';
+import PageLoading from '@/mixins/page-loading';
 import ProductFilter from '@/components/products/ProductFilter';
 import BasePagination from '@/components/BasePagination';
 import ProductList from '@/components/products/ProductList';
 
 export default {
   components: { ProductFilter, BasePagination, ProductList },
+  mixins: [PageLoading],
   data() {
     return {
       productsData: null,
@@ -50,7 +52,6 @@ export default {
         categoryId: 0,
         color: null,
       },
-      pageLoading: false,
       pageLoadingFailed: false,
     };
   },
@@ -88,8 +89,11 @@ export default {
     },
   },
   watch: {
-    pagination() {
-      this.loadProducts();
+    pagination: {
+      handler() {
+        this.loadProducts();
+      },
+      immediate: true,
     },
     filtration() {
       this.loadProducts();
@@ -97,8 +101,8 @@ export default {
   },
   methods: {
     async loadProducts() {
-      this.pageLoading = true;
-      this.pageLoadingFailed = false;
+      this.pageLoadStart();
+      this.pageLoadFailed(false);
 
       try {
         const response = await axios.get(`${config.API_URL}/api/products`, {
@@ -111,21 +115,11 @@ export default {
         this.productsData = response.data;
       } catch (e) {
         console.log(e);
-        this.pageLoadingFailed = true;
+        this.pageLoadFailed(true);
       } finally {
-        this.pageLoading = false;
+        this.pageLoadStop();
       }
     },
   },
-  created() {
-    this.loadProducts();
-  },
 };
 </script>
-
-<style>
-.page-loading {
-  opacity: .7;
-  pointer-events: none;
-}
-</style>

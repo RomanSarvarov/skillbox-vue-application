@@ -3,6 +3,8 @@ import products from '@/data/products';
 
 const store = createStore({
   state: {
+    pageLoading: false,
+    pageLoadFailed: false,
     cart: {
       products: [
         {
@@ -13,6 +15,15 @@ const store = createStore({
     },
   },
   mutations: {
+    pageLoadStart(state) {
+      state.pageLoading = true;
+    },
+    pageLoadStop(state) {
+      state.pageLoading = false;
+    },
+    pageLoadFailed(state, { failed = true }) {
+      state.pageLoadFailed = failed;
+    },
     addProductToCart(state, { productId, amount }) {
       const alreadyExistProduct = state.cart.products.find(
         (cartProduct) => cartProduct.productId === productId,
@@ -47,6 +58,12 @@ const store = createStore({
     },
   },
   getters: {
+    isPageLoading(state) {
+      return state.pageLoading;
+    },
+    isPageLoadFailed(state) {
+      return state.pageLoadFailed;
+    },
     cartDetailProducts(state) {
       return state.cart.products.map((cartProduct) => (
         {

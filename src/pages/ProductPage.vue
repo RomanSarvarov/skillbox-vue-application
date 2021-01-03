@@ -1,5 +1,6 @@
 <template>
-  <main class="content container">
+  <main class="content container" v-if="isPageLoadFailed">Не удалось загрузить товар</main>
+  <main class="content container" v-else>
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -9,12 +10,12 @@
         </li>
         <li class="breadcrumbs__item">
           <RouterLink class="breadcrumbs__link" :to="{ name: 'main' }">
-            {{ category.name }}
+            {{ category.title }}
           </RouterLink>
         </li>
         <li class="breadcrumbs__item">
           <a class="breadcrumbs__link">
-            {{ product.name }}
+            {{ product.title }}
           </a>
         </li>
       </ul>
@@ -23,14 +24,14 @@
     <section class="item">
       <div class="item__pics pics">
         <div class="pics__wrapper">
-          <img width="570" height="570" :src="product.image" :alt="product.name">
+          <img width="570" height="570" v-if="product.image" :src="product.image.file.url" :alt="product.title">
         </div>
       </div>
 
       <div class="item__info">
         <span class="item__code">Артикул: {{ product.id }}</span>
         <h2 class="item__title">
-          {{ product.name }}
+          {{ product.title }}
         </h2>
         <div class="item__form">
           <form class="form" method="POST" @submit.prevent="addToCart">
@@ -112,25 +113,46 @@
 </template>
 
 <script>
-import products from '@/data/products';
-import categories from '@/data/categories';
+import PageLoading from '@/mixins/page-loading';
+import axios from 'axios';
+import config from '@/config';
 import ProductColors from '@/components/products/ProductColors';
 import ProductAmount from '@/components/products/ProductAmount';
 
 export default {
   components: { ProductAmount, ProductColors },
+  mixins: [PageLoading],
   data() {
     return {
       color: null,
       amount: 1,
+      productData: null,
     };
   },
   computed: {
     product() {
-      return products.find((product) => product.id === +this.$route.params.id);
+      return {
+        title: 'загрузка...',
+
+        ...this.productData,
+      };
     },
     category() {
-      return categories.find((category) => category.id === this.product.categoryId);
+      return {
+        title: 'загрузка...',
+
+        ...(this.productData ? this.productData.category : null),
+      };
+    },
+  },
+  watch: {
+    '$route.params.id': {
+      handler() {
+        if (+this.$route.params.id > 0) {
+          this.loadProduct();
+        }
+      },
+      immediate: true,
     },
   },
   methods: {
@@ -139,6 +161,21 @@ export default {
         'addProductToCart',
         { productId: this.product.id, amount: this.amount },
       );
+    },
+    async loadProduct() {
+      this.pageLoadStart();
+      this.pageLoadFailed(false);
+
+      try {
+        const response = await axios.get(`${config.API_URL}/api/products/${+this.$route.params.id}`);
+
+        this.productData = response.data;
+      } catch (e) {
+        console.log(e);
+        this.pageLoadFailed(true);
+      } finally {
+        this.pageLoadStop();
+      }
     },
   },
 };
