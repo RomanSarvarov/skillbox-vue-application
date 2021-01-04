@@ -50,6 +50,7 @@ export default {
         priceFrom: 0,
         priceTo: 0,
         categoryId: 0,
+        colorId: 0,
         color: null,
       },
       pageLoadingFailed: false,
@@ -74,6 +75,7 @@ export default {
     filtration() {
       return {
         categoryId: this.filterData.categoryId > 0 ? this.filterData.categoryId : null,
+        colorId: this.filterData.color,
         minPrice: this.filterData.priceFrom,
         maxPrice: this.filterData.priceTo >= this.filterData.priceFrom ? this.filterData.priceTo : null,
       };

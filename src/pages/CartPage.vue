@@ -24,7 +24,9 @@
 
     <section class="cart">
       <form class="cart__form form" action="#" method="POST">
-        <div class="cart__field">
+        <div v-if="isCartLoading">Идет загрузка корзины...</div>
+        <div v-else-if="isCartLoadFailed">Не получилось загрузить корзину</div>
+        <div class="cart__field" v-else>
           <ul class="cart__list">
             <CartItem
               v-for="cartProduct in cartProducts"
@@ -62,6 +64,8 @@ export default {
       cartProducts: 'cartDetailProducts',
       totalPrice: 'cartTotalPrice',
       cartCount: 'cartCount',
+      isCartLoading: 'isCartLoading',
+      isCartLoadFailed: 'isCartLoading',
     }),
   },
 };

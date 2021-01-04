@@ -59,7 +59,6 @@
 <script>
 import axios from 'axios';
 import config from '@/config';
-import colors from '@/data/colors';
 import ProductColors from '@/components/products/ProductColors';
 
 export default {
@@ -74,6 +73,7 @@ export default {
       currentCategoryId: 0,
       currentColor: null,
       categoriesData: null,
+      colorsData: null,
     };
   },
   computed: {
@@ -81,7 +81,7 @@ export default {
       return this.categoriesData ? this.categoriesData.items : [];
     },
     colors() {
-      return colors;
+      return this.colorsData ? this.colorsData.items : [];
     },
   },
   watch: {
@@ -118,9 +118,15 @@ export default {
 
       this.categoriesData = response.data;
     },
+    async loadColors() {
+      const response = await axios.get(`${config.API_URL}/api/colors`);
+
+      this.colorsData = response.data;
+    },
   },
   created() {
     this.loadCategories();
+    this.loadColors();
   },
 };
 </script>

@@ -1,21 +1,24 @@
+import { mapGetters, mapMutations } from 'vuex';
+
 export default {
   computed: {
-    isPageLoading() {
-      return this.$store.getters.isPageLoading;
-    },
-    isPageLoadFailed() {
-      return this.$store.getters.isPageLoadFailed;
-    },
+    ...mapGetters(['isPageLoading', 'isPageLoadFailed']),
   },
   methods: {
-    pageLoadStart() {
-      this.$store.commit('pageLoadStart');
-    },
-    pageLoadStop() {
-      this.$store.commit('pageLoadStop');
-    },
-    pageLoadFailed(failed = true) {
-      this.$store.commit('pageLoadFailed', { failed });
+    ...mapMutations(['pageLoadStart', 'pageLoadStop', 'pageLoadFailed']),
+
+    renderValue(values, defaultValue = 'загрузка...') {
+      let value = this;
+
+      values.forEach((needle) => {
+        if (typeof value === 'undefined') {
+          return;
+        }
+
+        value = value[needle];
+      });
+
+      return value || defaultValue;
     },
   },
 };

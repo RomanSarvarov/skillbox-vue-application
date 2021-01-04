@@ -6,7 +6,7 @@
           v-model="selected"
           class="colors__radio sr-only"
           type="radio"
-          :value="color.code"
+          :value="color.id"
         />
         <span class="colors__value" :style="'background-color: ' + color.code + ';'"></span>
       </label>
@@ -19,8 +19,8 @@ export default {
   props: ['currentColor', 'colors'],
   computed: {
     selected: {
-      set(colorCode) {
-        this.$emit('update:currentColor', colorCode);
+      set(color) {
+        this.$emit('update:currentColor', color);
       },
       get() {
         return this.currentColor;

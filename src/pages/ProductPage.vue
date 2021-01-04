@@ -10,12 +10,12 @@
         </li>
         <li class="breadcrumbs__item">
           <RouterLink class="breadcrumbs__link" :to="{ name: 'main' }">
-            {{ category.title }}
+            {{ renderValue(['category', 'title']) }}
           </RouterLink>
         </li>
         <li class="breadcrumbs__item">
           <a class="breadcrumbs__link">
-            {{ product.title }}
+            {{ renderValue(['product', 'title']) }}
           </a>
         </li>
       </ul>
@@ -29,17 +29,17 @@
       </div>
 
       <div class="item__info">
-        <span class="item__code">Артикул: {{ product.id }}</span>
+        <span class="item__code">Артикул: {{ renderValue(['product', 'id']) }}</span>
         <h2 class="item__title">
-          {{ product.title }}
+          {{ renderValue(['product', 'title']) }}
         </h2>
         <div class="item__form">
           <form class="form" method="POST" @submit.prevent="addToCart">
             <b class="item__price">
-              {{ numberFormat.price(product.price) }} ₽
+              {{ numberFormat.price(renderValue(['product', 'price'], 0)) }} ₽
             </b>
 
-            <fieldset class="form__block">
+            <fieldset class="form__block" v-if="product.colors">
               <legend class="form__legend">Цвет:</legend>
 
               <ProductColors
@@ -51,10 +51,13 @@
             <div class="item__row">
               <ProductAmount v-model="amount" :svg-size="12" />
 
-              <button class="button button--primery" type="submit">
+              <button class="button button--primery" type="submit" :disabled="productAddingToCart">
                 В корзину
               </button>
             </div>
+
+            <div v-show="productAddedToCart">Товар добавлен в корзину</div>
+            <div v-show="productAddingToCart">Товар добавляется в корзину</div>
           </form>
         </div>
       </div>
@@ -118,6 +121,7 @@ import axios from 'axios';
 import config from '@/config';
 import ProductColors from '@/components/products/ProductColors';
 import ProductAmount from '@/components/products/ProductAmount';
+import { mapActions } from 'vuex';
 
 export default {
   components: { ProductAmount, ProductColors },
@@ -127,11 +131,16 @@ export default {
       color: null,
       amount: 1,
       productData: null,
+
+      productAddedToCart: false,
+      productAddingToCart: false,
     };
   },
   computed: {
     product() {
       return {
+        id: 0,
+        price: 0,
         title: 'загрузка...',
 
         ...this.productData,
@@ -139,6 +148,7 @@ export default {
     },
     category() {
       return {
+        id: 0,
         title: 'загрузка...',
 
         ...(this.productData ? this.productData.category : null),
@@ -156,11 +166,16 @@ export default {
     },
   },
   methods: {
-    addToCart() {
-      this.$store.commit(
-        'addProductToCart',
-        { productId: this.product.id, amount: this.amount },
-      );
+    ...mapActions(['addProductToCart']),
+
+    async addToCart() {
+      this.productAddedToCart = false;
+      this.productAddingToCart = true;
+
+      await this.addProductToCart({ productId: this.product.id, amount: this.amount });
+
+      this.productAddedToCart = true;
+      this.productAddingToCart = false;
     },
     async loadProduct() {
       this.pageLoadStart();
