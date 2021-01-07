@@ -23,7 +23,7 @@
     </div>
 
     <section class="cart">
-      <form class="cart__form form" action="#" method="POST">
+      <form class="cart__form form" method="POST" @submit.prevent="makeOrder">
         <div v-if="isCartLoading">Идет загрузка корзины...</div>
         <div v-else-if="isCartLoadFailed">Не получилось загрузить корзину</div>
         <div class="cart__field" v-else>
@@ -67,6 +67,11 @@ export default {
       isCartLoading: 'isCartLoading',
       isCartLoadFailed: 'isCartLoading',
     }),
+  },
+  methods: {
+    makeOrder() {
+      this.$router.push({ name: 'orderCreation' });
+    },
   },
 };
 </script>
