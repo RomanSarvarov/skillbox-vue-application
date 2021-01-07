@@ -2,14 +2,15 @@
   <li class="cart__item product">
     <div class="product__pic">
       <img
-          :src="cartProduct.product.image"
+          v-if="cartProduct.product.image"
+          :src="cartProduct.product.image.file.url"
           width="120"
           height="120"
           :alt="cartProduct.product.name"
       />
     </div>
     <h3 class="product__title">
-      {{ cartProduct.product.name }}
+      {{ cartProduct.product.title }}
     </h3>
     <span class="product__code">
       Артикул: {{ cartProduct.productId }}
@@ -25,7 +26,7 @@
         class="product__del button-del"
         type="button"
         aria-label="Удалить товар из корзины"
-        @click="itemDelete(cartProduct.productId)">
+        @click="cartItemDelete(cartProduct.productId)">
       <svg width="20" height="20" fill="currentColor">
         <use xlink:href="#icon-close"></use>
       </svg>
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
 import ProductAmount from '@/components/products/ProductAmount';
 
 export default {
@@ -46,15 +47,12 @@ export default {
         return this.cartProduct.amount;
       },
       set(amount) {
-        this.$store.commit(
-          'cartItemUpdateAmount',
-          { productId: this.cartProduct.productId, amount },
-        );
+        this.cartItemUpdateAmount({ productId: this.cartProduct.productId, amount });
       },
     },
   },
   methods: {
-    ...mapMutations({ itemDelete: 'cartItemDelete' }),
+    ...mapActions(['cartItemUpdateAmount', 'cartItemDelete']),
   },
 };
 </script>

@@ -34,7 +34,7 @@
               v-for="category in categories"
               :value="category.id"
               :key="category.id">
-              {{ category.name }}
+              {{ category.title }}
             </option>
           </select>
         </label>
@@ -57,8 +57,8 @@
 </template>
 
 <script>
-import categories from '@/data/categories';
-import colors from '@/data/colors';
+import axios from 'axios';
+import config from '@/config';
 import ProductColors from '@/components/products/ProductColors';
 
 export default {
@@ -72,14 +72,16 @@ export default {
       currentPriceTo: 0,
       currentCategoryId: 0,
       currentColor: null,
+      categoriesData: null,
+      colorsData: null,
     };
   },
   computed: {
     categories() {
-      return categories;
+      return this.categoriesData ? this.categoriesData.items : [];
     },
     colors() {
-      return colors;
+      return this.colorsData ? this.colorsData.items : [];
     },
   },
   watch: {
@@ -111,6 +113,20 @@ export default {
 
       this.apply();
     },
+    async loadCategories() {
+      const response = await axios.get(`${config.API_URL}/api/productCategories`);
+
+      this.categoriesData = response.data;
+    },
+    async loadColors() {
+      const response = await axios.get(`${config.API_URL}/api/colors`);
+
+      this.colorsData = response.data;
+    },
+  },
+  created() {
+    this.loadCategories();
+    this.loadColors();
   },
 };
 </script>

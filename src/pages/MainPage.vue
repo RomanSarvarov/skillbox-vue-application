@@ -5,7 +5,7 @@
         Каталог
       </h1>
       <span class="content__info">
-        152 товара
+        {{ productCount }} товар(-ов)
       </span>
     </div>
 
@@ -18,7 +18,11 @@
       />
 
       <section class="catalog">
-        <ProductList :products="products" />
+        <p v-if="isPageLoadFailed">
+          Ошибка загрузки
+          <button @click.prevent="loadProducts">Попробовать ещё раз</button>
+        </p>
+        <ProductList :products="products" v-else />
 
         <BasePagination v-model:page="page" :count="countProducts" :per-page="perPage"/>
       </section>
@@ -27,64 +31,96 @@
 </template>
 
 <script>
+import axios from 'axios';
+import config from '@/config';
+import PageLoading from '@/mixins/page-loading';
 import ProductFilter from '@/components/products/ProductFilter';
 import BasePagination from '@/components/BasePagination';
 import ProductList from '@/components/products/ProductList';
-import products from '@/data/products';
 
 export default {
   components: { ProductFilter, BasePagination, ProductList },
+  mixins: [PageLoading],
   data() {
     return {
+      productsData: null,
       page: 1,
       perPage: 3,
       filterData: {
         priceFrom: 0,
         priceTo: 0,
         categoryId: 0,
+        colorId: 0,
         color: null,
       },
+      pageLoadingFailed: false,
     };
   },
   computed: {
-    filteredProducts() {
-      let filteredProducts = products;
-
-      if (this.filterData.priceFrom > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price >= this.filterData.priceFrom,
-        );
-      }
-
-      if (this.filterData.priceTo > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price <= this.filterData.priceTo,
-        );
-      }
-
-      if (this.filterData.categoryId > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.categoryId === this.filterData.categoryId,
-        );
-      }
-
-      if (this.filterData.color !== null) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.colors.findIndex(
-            (color) => color.code === this.filterData.color,
-          ) !== -1,
-        );
-      }
-
-      return filteredProducts;
-    },
     products() {
-      const offset = (this.page - 1) * this.perPage;
+      if (this.productsData) {
+        const products = this.productsData.items.map((product) => ({
+          ...product,
+          image: product.image.file.url,
+        }));
 
-      return this.filteredProducts.slice(offset, offset + this.perPage);
+        return products;
+      }
+
+      return [];
     },
     countProducts() {
-      return this.filteredProducts.length;
+      return this.productsData ? this.productsData.pagination.total : 0;
+    },
+    filtration() {
+      return {
+        categoryId: this.filterData.categoryId > 0 ? this.filterData.categoryId : null,
+        colorId: this.filterData.color,
+        minPrice: this.filterData.priceFrom,
+        maxPrice: this.filterData.priceTo >= this.filterData.priceFrom ? this.filterData.priceTo : null,
+      };
+    },
+    pagination() {
+      return {
+        page: this.page,
+        limit: this.perPage,
+      };
+    },
+    productCount() {
+      return this.productsData ? this.productsData.pagination.total : 0;
+    },
+  },
+  watch: {
+    pagination: {
+      handler() {
+        this.loadProducts();
+      },
+      immediate: true,
+    },
+    filtration() {
+      this.loadProducts();
+    },
+  },
+  methods: {
+    async loadProducts() {
+      this.pageLoadStart();
+      this.pageLoadFailed(false);
+
+      try {
+        const response = await axios.get(`${config.API_URL}/api/products`, {
+          params: {
+            ...this.filtration,
+            ...this.pagination,
+          },
+        });
+
+        this.productsData = response.data;
+      } catch (e) {
+        console.log(e);
+        this.pageLoadFailed(true);
+      } finally {
+        this.pageLoadStop();
+      }
     },
   },
 };
