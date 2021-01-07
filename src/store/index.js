@@ -15,8 +15,12 @@ const store = createStore({
       productsData: null,
       products: [],
     },
+    orderInfo: null,
   },
   mutations: {
+    updateOrderInfo(state, orderInfo) {
+      state.orderInfo = orderInfo;
+    },
     pageLoadStart(state) {
       state.pageLoading = true;
     },
@@ -25,6 +29,10 @@ const store = createStore({
     },
     pageLoadFailed(state, failed = true) {
       state.pageLoadFailed = failed;
+    },
+    cartFlush(state) {
+      state.cart.productsData = null;
+      state.cart.products = [];
     },
     cartLoadStart(state) {
       state.cartLoading = true;
@@ -170,6 +178,17 @@ const store = createStore({
       } catch (e) {
         context.commit('adaptCartProducts', context.state.cart.productsData);
       }
+    },
+    async loadOrderInfo(context, orderId) {
+      const response = await axios.get(`${config.API_URL}/api/orders/${orderId}`, {
+        params: {
+          userAccessKey: context.state.auth.token,
+        },
+      });
+
+      context.commit('updateOrderInfo', response.data);
+
+      return response;
     },
   },
 });

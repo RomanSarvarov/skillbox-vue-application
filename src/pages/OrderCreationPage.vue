@@ -3,19 +3,19 @@
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="index.html">
+          <RouterLink class="breadcrumbs__link" :to="{ name: 'main' }">
             Каталог
-          </a>
+          </RouterLink>
         </li>
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link" href="cart.html">
+          <RouterLink class="breadcrumbs__link" :to="{ name: 'cart' }">
             Корзина
-          </a>
+          </RouterLink>
         </li>
         <li class="breadcrumbs__item">
-          <a class="breadcrumbs__link">
+          <RouterLink class="breadcrumbs__link" :to="{ name: 'orderCreation' }">
             Оформление заказа
-          </a>
+          </RouterLink>
         </li>
       </ul>
 
@@ -28,7 +28,7 @@
     </div>
 
     <section class="cart">
-      <form class="cart__form form" action="#" method="POST">
+      <form class="cart__form form" method="POST" @submit.prevent="submitOrder">
         <div class="cart__field">
           <div class="cart__data">
             <BaseFormText
@@ -66,11 +66,11 @@
             />
 
             <BaseFormTextarea
-                name="comments"
+                name="comment"
                 title="Комментарии"
                 placeholder="Введите ваши пожелания"
-                :error="formErrors.comments"
-                v-model="formData.comments"
+                :error="formErrors.comment"
+                v-model="formData.comment"
             />
           </div>
         </div>
@@ -103,11 +103,10 @@
             Оформить заказ
           </button>
         </div>
-        <div class="cart__error form__error-block">
+
+        <div class="cart__error form__error-block" v-if="formFatalError">
           <h4>Заявка не отправлена!</h4>
-          <p>
-            Похоже произошла ошибка. Попробуйте отправить снова или перезагрузите страницу.
-          </p>
+          <p>{{ formFatalError }}</p>
         </div>
       </form>
     </section>
@@ -117,6 +116,9 @@
 <script>
 import BaseFormText from '@/components/form/BaseFormText';
 import BaseFormTextarea from '@/components/form/BaseFormTextarea';
+import axios from 'axios';
+import config from '@/config';
+import { mapMutations } from 'vuex';
 
 export default {
   components: { BaseFormTextarea, BaseFormText },
@@ -124,7 +126,43 @@ export default {
     return {
       formData: {},
       formErrors: {},
+      formFatalError: '',
     };
+  },
+  methods: {
+    ...mapMutations(['cartFlush', 'updateOrderInfo']),
+
+    async submitOrder() {
+      this.formErrors = {};
+      this.formFatalError = '';
+
+      try {
+        const response = await axios.post(`${config.API_URL}/api/orders`, {
+          ...this.formData,
+        }, {
+          params: {
+            userAccessKey: this.$store.state.auth.token,
+          },
+        });
+
+        // Обновляем данные заказы в глобальном хранилище.
+        this.updateOrderInfo(response.data);
+
+        // Очищаем корзину.
+        this.cartFlush();
+
+        // Делаем редирект на страницу заказа.
+        this.redirectToOrderViewPage(response.data.id);
+      } catch (e) {
+        this.formErrors = e.response.data.error.request || {};
+        this.formFatalError = e.response.data.error.message;
+      }
+    },
+    redirectToOrderViewPage(orderId) {
+      this.$router.push(
+        { name: 'orderView', params: { id: orderId } },
+      );
+    },
   },
 };
 </script>
