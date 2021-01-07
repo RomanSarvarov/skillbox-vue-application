@@ -84,6 +84,12 @@
       </form>
     </section>
   </main>
+  <main class="content container" v-else-if="orderLoading">
+    Идёт загрузка данных заказа {{ orderId }}...
+  </main>
+  <main class="content container" v-else-if="orderLoadingFailed">
+    Ошибка загрузки данных заказа {{ orderId }}!
+  </main>
 </template>
 
 <script>
@@ -92,6 +98,12 @@ import ProductSideList from '@/components/products/ProductSideList';
 
 export default {
   components: { ProductSideList },
+  data() {
+    return {
+      orderLoading: false,
+      orderLoadingFailed: false,
+    };
+  },
   computed: {
     orderId() {
       return +this.$route.params.id;
@@ -122,7 +134,14 @@ export default {
         return;
       }
 
-      this.loadOrderInfo(this.orderId);
+      this.orderLoading = true;
+      this.orderLoadingFailed = false;
+
+      this.loadOrderInfo(this.orderId).then(() => {
+        this.orderLoading = false;
+      }).catch(() => {
+        this.orderLoadingFailed = false;
+      });
     },
   },
   created() {
