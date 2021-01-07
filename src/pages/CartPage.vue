@@ -18,7 +18,7 @@
         Корзина
       </h1>
       <span class="content__info">
-        {{ cartCount }} товара
+        {{ cartCount }} товар(-ов)
       </span>
     </div>
 
@@ -44,7 +44,7 @@
             Итого: <span>{{ numberFormat.price(totalPrice) }} ₽</span>
           </p>
 
-          <button class="cart__button button button--primery" type="submit">
+          <button class="cart__button button button--primery" type="submit" v-if="cartCount > 0">
             Оформить заказ
           </button>
         </div>
