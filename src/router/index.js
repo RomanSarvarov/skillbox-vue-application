@@ -1,4 +1,4 @@
-import { createWebHistory, createRouter } from 'vue-router';
+import { createWebHashHistory, createRouter } from 'vue-router';
 import MainPage from '@/pages/MainPage';
 import NotFoundPage from '@/pages/errors/NotFoundPage';
 import ProductPage from '@/pages/ProductPage';
@@ -39,7 +39,7 @@ const routes = [
   },
 ];
 
-const history = createWebHistory();
+const history = createWebHashHistory();
 
 const router = createRouter({
   history,
