@@ -3,6 +3,8 @@ import MainPage from '@/pages/MainPage';
 import NotFoundPage from '@/pages/errors/NotFoundPage';
 import ProductPage from '@/pages/ProductPage';
 import CartPage from '@/pages/CartPage';
+import OrderCreationPage from '@/pages/OrderCreationPage';
+import OrderViewPage from '@/pages/OrderViewPage';
 
 const routes = [
   {
@@ -19,6 +21,16 @@ const routes = [
     name: 'cart',
     component: CartPage,
     path: '/cart',
+  },
+  {
+    name: 'orderCreation',
+    component: OrderCreationPage,
+    path: '/order',
+  },
+  {
+    name: 'orderView',
+    component: OrderViewPage,
+    path: '/order/:id',
   },
   {
     name: 'notFound',
