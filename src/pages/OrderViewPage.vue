@@ -126,6 +126,16 @@ export default {
       });
     },
   },
+  watch: {
+    orderId: {
+      handler() {
+        // Загружаем данные по заказу,
+        // если этих данных нет в глобальном хранилище.
+        this.loadOrderInfoIfNeeded();
+      },
+      immediate: true,
+    },
+  },
   methods: {
     ...mapActions(['loadOrderInfo']),
 
@@ -137,17 +147,12 @@ export default {
       this.orderLoading = true;
       this.orderLoadingFailed = false;
 
-      this.loadOrderInfo(this.orderId).then(() => {
+      this.loadOrderInfo(this.orderId).catch(() => {
+        this.orderLoadingFailed = true;
+      }).then(() => {
         this.orderLoading = false;
-      }).catch(() => {
-        this.orderLoadingFailed = false;
       });
     },
-  },
-  created() {
-    // Загружаем данные по заказу,
-    // если этих данных нет в глобальном хранилище.
-    this.loadOrderInfoIfNeeded();
   },
 };
 </script>
