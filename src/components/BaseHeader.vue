@@ -4,7 +4,7 @@
       <span class="header__info">Каталог</span>
 
       <RouterLink class="header__logo" :to="{ name: 'main' }">
-        <img src="/img/svg/logo-tech.svg" alt="Логотип интернет магазина Технозавррр" width="190" height="33">
+        <img src="img/svg/logo-tech.svg" alt="Логотип интернет магазина Технозавррр" width="190" height="33">
       </RouterLink>
 
       <a class="header__tel" href="tel:8 800 600 90 09">
