@@ -117,11 +117,9 @@
 
 <script>
 import PageLoading from '@/mixins/page-loading';
-import axios from 'axios';
-import config from '@/config';
 import ProductColors from '@/components/products/ProductColors';
 import ProductAmount from '@/components/products/ProductAmount';
-import { mapState, mapActions } from 'vuex';
+import { mapMutations, mapState, mapActions } from 'vuex';
 
 export default {
   components: { ProductAmount, ProductColors },
@@ -161,7 +159,7 @@ export default {
     '$route.params.id': {
       handler() {
         if (+this.$route.params.id > 0) {
-          this.loadProduct();
+          this.loadProduct(+this.$route.params.id);
         }
       },
       immediate: true,
@@ -169,6 +167,8 @@ export default {
   },
   methods: {
     ...mapActions('cart', ['addProductToCart']),
+    ...mapActions('product', ['loadProductData']),
+    ...mapMutations('pageLoading', ['pageLoadStart', 'pageLoadStop', 'pageLoadFail']),
 
     async addToCart() {
       this.productAddedToCart = false;
@@ -179,14 +179,12 @@ export default {
       this.productAddedToCart = true;
       this.productAddingToCart = false;
     },
-    async loadProduct() {
+    async loadProduct(productId) {
       this.pageLoadStart();
       this.pageLoadFail(false);
 
       try {
-        const response = await axios.get(`${config.API_URL}/api/products/${+this.$route.params.id}`);
-
-        this.productData = response.data;
+        this.productData = await this.loadProductData(productId);
       } catch (e) {
         console.log(e);
         this.pageLoadFail(true);

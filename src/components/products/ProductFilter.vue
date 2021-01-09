@@ -57,8 +57,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import config from '@/config';
+import { mapActions } from 'vuex';
 import ProductColors from '@/components/products/ProductColors';
 
 export default {
@@ -99,6 +98,9 @@ export default {
     },
   },
   methods: {
+    ...mapActions('productCategory', ['loadCategoriesData']),
+    ...mapActions('productColor', ['loadColorsData']),
+
     apply() {
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:priceTo', this.currentPriceTo);
@@ -114,14 +116,10 @@ export default {
       this.apply();
     },
     async loadCategories() {
-      const response = await axios.get(`${config.API_URL}/api/productCategories`);
-
-      this.categoriesData = response.data;
+      this.categoriesData = await this.loadCategoriesData();
     },
     async loadColors() {
-      const response = await axios.get(`${config.API_URL}/api/colors`);
-
-      this.colorsData = response.data;
+      this.colorsData = await this.loadColorsData();
     },
   },
   created() {

@@ -96,8 +96,6 @@
 <script>
 import BaseFormText from '@/components/form/BaseFormText';
 import BaseFormTextarea from '@/components/form/BaseFormTextarea';
-import axios from 'axios';
-import config from '@/config';
 import { mapMutations, mapGetters } from 'vuex';
 import ProductSideList from '@/components/products/ProductSideList';
 
@@ -116,7 +114,7 @@ export default {
   methods: {
     ...mapMutations('pageLoading', ['pageLoadStart', 'pageLoadStop', 'pageLoadFail']),
     ...mapMutations('cart', ['cartFlush']),
-    ...mapMutations('orders', ['updateOrderInfo']),
+    ...mapMutations('order', ['updateOrderInfo', 'createOrder']),
 
     async submitOrder() {
       this.formErrors = {};
@@ -125,22 +123,18 @@ export default {
       this.pageLoadFail(false);
 
       try {
-        const response = await axios.post(`${config.API_URL}/api/orders`, {
-          ...this.formData,
-        }, {
-          params: {
-            userAccessKey: this.$store.state.auth.token,
-          },
-        });
+        const newOrderData = this.createOrder(
+          { formData: this.formData },
+        );
 
         // Обновляем данные заказы в глобальном хранилище.
-        this.updateOrderInfo(response.data);
+        this.updateOrderInfo(newOrderData);
 
         // Очищаем корзину.
         this.cartFlush();
 
         // Делаем редирект на страницу заказа.
-        this.redirectToOrderViewPage(response.data.id);
+        this.redirectToOrderViewPage(newOrderData.id);
       } catch (e) {
         this.formErrors = e.response.data.error.request || {};
         this.formFatalError = e.response.data.error.message;

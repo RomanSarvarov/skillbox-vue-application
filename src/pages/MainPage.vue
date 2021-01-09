@@ -31,8 +31,7 @@
 </template>
 
 <script>
-import axios from 'axios';
-import config from '@/config';
+import { mapActions } from 'vuex';
 import PageLoading from '@/mixins/page-loading';
 import ProductFilter from '@/components/products/ProductFilter';
 import BasePagination from '@/components/BasePagination';
@@ -102,19 +101,17 @@ export default {
     },
   },
   methods: {
+    ...mapActions('product', ['loadProductsData']),
+
     async loadProducts() {
       this.pageLoadStart();
       this.pageLoadFail(false);
 
       try {
-        const response = await axios.get(`${config.API_URL}/api/products`, {
-          params: {
-            ...this.filtration,
-            ...this.pagination,
-          },
+        this.productsData = await this.loadProductsData({
+          pagination: this.pagination,
+          filtration: this.filtration,
         });
-
-        this.productsData = response.data;
       } catch (e) {
         console.log(e);
         this.pageLoadFail(true);

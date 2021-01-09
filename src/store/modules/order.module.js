@@ -12,6 +12,17 @@ export default {
     },
   },
   actions: {
+    async createOrder(context, { formData }) {
+      const response = await axios.post(`${config.API_URL}/api/orders`, {
+        ...formData,
+      }, {
+        params: {
+          userAccessKey: this.$store.state.auth.token,
+        },
+      });
+
+      return response.data;
+    },
     async loadOrderInfo(context, orderId) {
       const response = await axios.get(`${config.API_URL}/api/orders/${orderId}`, {
         params: {

@@ -105,7 +105,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('orders', ['orderInfo']),
+    ...mapState('order', ['orderInfo']),
 
     orderId() {
       return +this.$route.params.id;
@@ -136,7 +136,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('orders', ['loadOrderInfo']),
+    ...mapActions('order', ['loadOrderInfo']),
 
     loadOrderInfoIfNeeded() {
       if (this.orderInfo && this.orderInfo.id === this.orderId) {
