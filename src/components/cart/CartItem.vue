@@ -52,7 +52,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['cartItemUpdateAmount', 'cartItemDelete']),
+    ...mapActions('cart', ['cartItemUpdateAmount', 'cartItemDelete']),
   },
 };
 </script>

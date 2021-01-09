@@ -18,7 +18,7 @@
       />
 
       <section class="catalog">
-        <p v-if="isPageLoadFailed">
+        <p v-if="pageLoadFailed">
           Ошибка загрузки
           <button @click.prevent="loadProducts">Попробовать ещё раз</button>
         </p>
@@ -104,7 +104,7 @@ export default {
   methods: {
     async loadProducts() {
       this.pageLoadStart();
-      this.pageLoadFailed(false);
+      this.pageLoadFail(false);
 
       try {
         const response = await axios.get(`${config.API_URL}/api/products`, {
@@ -117,7 +117,7 @@ export default {
         this.productsData = response.data;
       } catch (e) {
         console.log(e);
-        this.pageLoadFailed(true);
+        this.pageLoadFail(true);
       } finally {
         this.pageLoadStop();
       }

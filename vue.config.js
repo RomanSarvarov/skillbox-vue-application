@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: '/skillbox-vue-application-build/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/skillbox-vue-application-build/' : '',
 };

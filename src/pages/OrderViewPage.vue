@@ -1,5 +1,5 @@
 <template>
-  <main class="content container" v-if="orderData">
+  <main class="content container" v-if="orderInfo">
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -38,7 +38,7 @@
                 Получатель
               </span>
               <span class="dictionary__value">
-                {{ orderData.name }}
+                {{ orderInfo.name }}
               </span>
             </li>
             <li class="dictionary__item">
@@ -46,7 +46,7 @@
                 Адрес доставки
               </span>
               <span class="dictionary__value">
-                {{ orderData.address }}
+                {{ orderInfo.address }}
               </span>
             </li>
             <li class="dictionary__item">
@@ -54,7 +54,7 @@
                 Телефон
               </span>
               <span class="dictionary__value">
-                {{ orderData.phone }}
+                {{ orderInfo.phone }}
               </span>
             </li>
             <li class="dictionary__item">
@@ -62,7 +62,7 @@
                 Email
               </span>
               <span class="dictionary__value">
-                {{ orderData.email }}
+                {{ orderInfo.email }}
               </span>
             </li>
             <li class="dictionary__item">
@@ -77,8 +77,8 @@
         </div>
 
         <ProductSideList
-          :total="orderData.totalPrice"
-          :count="+orderData.basket.items.length"
+          :total="orderInfo.totalPrice"
+          :count="+orderInfo.basket.items.length"
           :products-data="productsSide"
         />
       </form>
@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import ProductSideList from '@/components/products/ProductSideList';
 
 export default {
@@ -105,19 +105,18 @@ export default {
     };
   },
   computed: {
+    ...mapState('orders', ['orderInfo']),
+
     orderId() {
       return +this.$route.params.id;
     },
-    orderData() {
-      return this.$store.state.orderInfo;
-    },
     productsSide() {
-      if (!this.orderData.basket || this.orderData.basket.items.length < 1) {
+      if (!this.orderInfo.basket || this.orderInfo.basket.items.length < 1) {
         return [];
       }
 
       // Подводим ответ с сервера под наши параметры.
-      return this.orderData.basket.items.map((productData) => {
+      return this.orderInfo.basket.items.map((productData) => {
         const newProductData = productData;
         newProductData.amount = newProductData.quantity;
         delete newProductData.quantity;
@@ -137,10 +136,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['loadOrderInfo']),
+    ...mapActions('orders', ['loadOrderInfo']),
 
     loadOrderInfoIfNeeded() {
-      if (this.orderData && this.orderData.id === this.orderId) {
+      if (this.orderInfo && this.orderInfo.id === this.orderId) {
         return;
       }
 

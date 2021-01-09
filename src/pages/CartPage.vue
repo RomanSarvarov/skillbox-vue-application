@@ -60,7 +60,7 @@ import CartItem from '@/components/cart/CartItem';
 export default {
   components: { CartItem },
   computed: {
-    ...mapGetters({
+    ...mapGetters('cart', {
       cartProducts: 'cartDetailProducts',
       totalPrice: 'cartTotalPrice',
       cartCount: 'cartCount',

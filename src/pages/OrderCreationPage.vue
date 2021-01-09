@@ -111,16 +111,18 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['cartDetailProducts', 'cartCount', 'cartTotalPrice']),
+    ...mapGetters('cart', ['cartDetailProducts', 'cartCount', 'cartTotalPrice']),
   },
   methods: {
-    ...mapMutations(['pageLoadStart', 'pageLoadStop', 'pageLoadFailed', 'cartFlush', 'updateOrderInfo']),
+    ...mapMutations('pageLoading', ['pageLoadStart', 'pageLoadStop', 'pageLoadFail']),
+    ...mapMutations('cart', ['cartFlush']),
+    ...mapMutations('orders', ['updateOrderInfo']),
 
     async submitOrder() {
       this.formErrors = {};
       this.formFatalError = '';
       this.pageLoadStart();
-      this.pageLoadFailed(false);
+      this.pageLoadFail(false);
 
       try {
         const response = await axios.post(`${config.API_URL}/api/orders`, {
@@ -142,7 +144,7 @@ export default {
       } catch (e) {
         this.formErrors = e.response.data.error.request || {};
         this.formFatalError = e.response.data.error.message;
-        this.pageLoadFailed(true);
+        this.pageLoadFail(true);
       } finally {
         this.pageLoadStop();
       }

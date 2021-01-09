@@ -14,6 +14,6 @@ git init
 git add -A
 git commit -m 'deploy'
 
-git push -f git@github.com:RomanSarvarov/skillbox-vue-application-build.git master:gh-pages
+git push -f git@github.com:RomanSarvarov/skillbox-vue-application-build.git diplom:gh-pages
 
 cd -

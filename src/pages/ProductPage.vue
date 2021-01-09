@@ -1,5 +1,5 @@
 <template>
-  <main class="content container" v-if="isPageLoadFailed">Не удалось загрузить товар</main>
+  <main class="content container" v-if="pageLoadFailed">Не удалось загрузить товар</main>
   <main class="content container" v-else>
     <div class="content__top">
       <ul class="breadcrumbs">
@@ -121,7 +121,7 @@ import axios from 'axios';
 import config from '@/config';
 import ProductColors from '@/components/products/ProductColors';
 import ProductAmount from '@/components/products/ProductAmount';
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   components: { ProductAmount, ProductColors },
@@ -137,6 +137,8 @@ export default {
     };
   },
   computed: {
+    ...mapState('pageLoading', ['pageLoading', 'pageLoadFailed']),
+
     product() {
       return {
         id: 0,
@@ -166,7 +168,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['addProductToCart']),
+    ...mapActions('cart', ['addProductToCart']),
 
     async addToCart() {
       this.productAddedToCart = false;
@@ -179,7 +181,7 @@ export default {
     },
     async loadProduct() {
       this.pageLoadStart();
-      this.pageLoadFailed(false);
+      this.pageLoadFail(false);
 
       try {
         const response = await axios.get(`${config.API_URL}/api/products/${+this.$route.params.id}`);
@@ -187,7 +189,7 @@ export default {
         this.productData = response.data;
       } catch (e) {
         console.log(e);
-        this.pageLoadFailed(true);
+        this.pageLoadFail(true);
       } finally {
         this.pageLoadStop();
       }

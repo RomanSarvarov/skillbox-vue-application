@@ -1,11 +1,11 @@
-import { mapGetters, mapMutations } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   computed: {
-    ...mapGetters(['isPageLoading', 'isPageLoadFailed']),
+    ...mapState('pageLoading', ['pageLoading', 'pageLoadFailed']),
   },
   methods: {
-    ...mapMutations(['pageLoadStart', 'pageLoadStop', 'pageLoadFailed']),
+    ...mapMutations('pageLoading', ['pageLoadStart', 'pageLoadStop', 'pageLoadFail']),
 
     renderValue(values, defaultValue = 'загрузка...') {
       let value = this;

@@ -2,7 +2,7 @@
   <div>
     <BaseHeader />
 
-    <div :class="{ 'page-loading': isPageLoading }">
+    <div :class="{ 'page-loading': pageLoading }">
       <RouterView />
     </div>
 
@@ -20,8 +20,8 @@ export default {
   components: { BaseFooter, BaseHeader },
   mixins: [PageLoading],
   methods: {
-    ...mapActions(['loadCart']),
-    ...mapMutations(['updateAuthToken']),
+    ...mapActions('cart', ['loadCart']),
+    ...mapMutations('auth', ['updateAuthToken']),
   },
   created() {
     const authToken = localStorage.getItem('authToken');
