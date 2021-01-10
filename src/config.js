@@ -1,3 +1,4 @@
 export default {
-  API_URL: 'https://vue-study.dev.creonit.ru',
+  API_URL: 'https://vue-tzr.skillbox.cc',
+  PRODUCT_COLOR_PROP_ID: 7,
 };

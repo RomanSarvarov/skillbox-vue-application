@@ -2,8 +2,8 @@
   <li class="cart__item product">
     <div class="product__pic">
       <img
-          v-if="cartProduct.product.image"
-          :src="cartProduct.product.image.file.url"
+          v-if="cartProduct.product.preview"
+          :src="cartProduct.product.preview.file.url"
           width="120"
           height="120"
           :alt="cartProduct.product.name"
@@ -19,7 +19,7 @@
     <ProductAmount v-model="amount" class="product__counter" />
 
     <b class="product__price">
-      {{ numberFormat.price(cartProduct.product.price * cartProduct.amount) }} ₽
+      {{ numberHelper.price(cartProduct.product.price * cartProduct.amount) }} ₽
     </b>
 
     <button

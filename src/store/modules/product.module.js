@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '@/config';
+import ProductHelper from '@/helpers/product.helper';
 
 export default {
   namespaced: true,
@@ -12,7 +13,14 @@ export default {
           ...filtration,
         },
       });
-      return response.data;
+
+      return {
+        ...response.data,
+
+        items: response.data.items.map(
+          (product) => ProductHelper.format(product),
+        ),
+      };
     },
     async loadProductData(context, productId) {
       const response = await axios.get(`${config.API_URL}/api/products/${productId}`);

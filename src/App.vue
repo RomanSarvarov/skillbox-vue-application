@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import PageLoading from '@/mixins/page-loading';
+import PageLoading from '@/mixins/page-loading.mixin';
 import BaseHeader from '@/components/BaseHeader';
 import BaseFooter from '@/components/BaseFooter';
 import { mapActions, mapMutations } from 'vuex';

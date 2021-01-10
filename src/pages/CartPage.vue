@@ -41,7 +41,7 @@
             Мы&nbsp;посчитаем стоимость доставки на&nbsp;следующем этапе
           </p>
           <p class="cart__price">
-            Итого: <span>{{ numberFormat.price(totalPrice) }} ₽</span>
+            Итого: <span>{{ numberHelper.price(totalPrice) }} ₽</span>
           </p>
 
           <button class="cart__button button button--primery" type="submit" v-if="cartCount > 0">

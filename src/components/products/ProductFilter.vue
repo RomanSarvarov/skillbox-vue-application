@@ -2,54 +2,22 @@
   <aside class="filter">
     <h2 class="filter__title">Фильтры</h2>
 
-    <form class="filter__form form" action="#" method="get" @submit.prevent="apply()">
-      <fieldset class="form__block">
-        <legend class="form__legend">Цена</legend>
-        <label class="form__label form__label--price">
-          <input
-            class="form__input"
-            type="text"
-            name="min-price"
-            v-model.number="currentPriceFrom"
-          />
-          <span class="form__value">От</span>
-        </label>
-        <label class="form__label form__label--price">
-          <input
-            class="form__input"
-            type="text"
-            name="max-price"
-            v-model.number="currentPriceTo"
-          />
-          <span class="form__value">До</span>
-        </label>
-      </fieldset>
+    <form class="filter__form form" method="GET" @submit.prevent="apply">
+      <ProductPriceFilter
+        v-model:price-from="currentPriceFrom"
+        v-model:price-to="currentPriceTo"
+      />
 
-      <fieldset class="form__block">
-        <legend class="form__legend">Категория</legend>
-        <label class="form__label form__label--select">
-          <select class="form__select" name="category" v-model.number="currentCategoryId">
-            <option value="0">Все категории</option>
-            <option
-              v-for="category in categories"
-              :value="category.id"
-              :key="category.id">
-              {{ category.title }}
-            </option>
-          </select>
-        </label>
-      </fieldset>
-
-      <fieldset class="form__block">
-        <legend class="form__legend">Цвет</legend>
-
-        <ProductColors :colors="colors" v-model:current-color="currentColor" />
-      </fieldset>
+      <ProductCategoryFilter
+        v-model:category-id="currentCategoryId"
+        v-model:props="currentProps"
+      />
 
       <button class="filter__submit button button--primery" type="submit">
         Применить
       </button>
-      <button class="filter__reset button button--second" type="button" @click="reset">
+
+      <button v-show="filterDataAffected" class="filter__reset button button--second" type="button" @click="reset">
         Сбросить
       </button>
     </form>
@@ -57,30 +25,29 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import ProductColors from '@/components/products/ProductColors';
+import ProductPriceFilter from '@/components/products/filter/ProductPriceFilter';
+import ProductCategoryFilter from '@/components/products/filter/ProductCategoryFilter';
 
 export default {
   components: {
-    ProductColors,
+    ProductCategoryFilter,
+    ProductPriceFilter,
   },
-  props: ['priceFrom', 'priceTo', 'categoryId', 'color'],
+  props: ['priceFrom', 'priceTo', 'categoryId', 'color', 'props'],
   data() {
     return {
       currentPriceFrom: 0,
       currentPriceTo: 0,
       currentCategoryId: 0,
-      currentColor: null,
-      categoriesData: null,
-      colorsData: null,
+      currentProps: {},
     };
   },
   computed: {
-    categories() {
-      return this.categoriesData ? this.categoriesData.items : [];
-    },
-    colors() {
-      return this.colorsData ? this.colorsData.items : [];
+    filterDataAffected() {
+      return this.currentPriceFrom
+          || this.currentPriceTo
+          || this.currentCategoryId
+          || Object.keys(this.currentProps).length > 0;
     },
   },
   watch: {
@@ -93,38 +60,22 @@ export default {
     categoryId(value) {
       this.currentCategoryId = value;
     },
-    color(value) {
-      this.currentColor = value;
-    },
   },
   methods: {
-    ...mapActions('productCategory', ['loadCategoriesData']),
-    ...mapActions('productColor', ['loadColorsData']),
-
     apply() {
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:categoryId', this.currentCategoryId);
-      this.$emit('update:color', this.currentColor);
+      this.$emit('update:props', this.currentProps);
     },
     reset() {
       this.currentPriceFrom = 0;
       this.currentPriceTo = 0;
       this.currentCategoryId = 0;
-      this.currentColor = null;
+      this.currentProps = {};
 
       this.apply();
     },
-    async loadCategories() {
-      this.categoriesData = await this.loadCategoriesData();
-    },
-    async loadColors() {
-      this.colorsData = await this.loadColorsData();
-    },
-  },
-  created() {
-    this.loadCategories();
-    this.loadColors();
   },
 };
 </script>

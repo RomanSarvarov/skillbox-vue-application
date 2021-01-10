@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import FormFieldMixin from '@/mixins/form-field';
+import FormFieldMixin from '@/mixins/form-field.mixin';
 
 export default {
   mixins: [FormFieldMixin],

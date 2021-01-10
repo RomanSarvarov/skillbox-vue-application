@@ -4,7 +4,7 @@
       <h1 class="content__title">
         Каталог
       </h1>
-      <span class="content__info">
+      <span class="content__info" v-show="productCount">
         {{ productCount }} товар(-ов)
       </span>
     </div>
@@ -14,13 +14,16 @@
           v-model:price-from="filterData.priceFrom"
           v-model:price-to="filterData.priceTo"
           v-model:category-id="filterData.categoryId"
-          v-model:color="filterData.color"
+          v-model:props="filterData.props"
       />
 
       <section class="catalog">
         <p v-if="pageLoadFailed">
           Ошибка загрузки
           <button @click.prevent="loadProducts">Попробовать ещё раз</button>
+        </p>
+        <p v-else-if="pageLoading">
+          Идет загрузка товаров...
         </p>
         <ProductList :products="products" v-else />
 
@@ -32,7 +35,7 @@
 
 <script>
 import { mapActions } from 'vuex';
-import PageLoading from '@/mixins/page-loading';
+import PageLoading from '@/mixins/page-loading.mixin';
 import ProductFilter from '@/components/products/ProductFilter';
 import BasePagination from '@/components/BasePagination';
 import ProductList from '@/components/products/ProductList';
@@ -44,13 +47,12 @@ export default {
     return {
       productsData: null,
       page: 1,
-      perPage: 3,
+      perPage: 12,
       filterData: {
         priceFrom: 0,
         priceTo: 0,
         categoryId: 0,
-        colorId: 0,
-        color: null,
+        props: {},
       },
       pageLoadingFailed: false,
     };
@@ -58,12 +60,7 @@ export default {
   computed: {
     products() {
       if (this.productsData) {
-        const products = this.productsData.items.map((product) => ({
-          ...product,
-          image: product.image.file.url,
-        }));
-
-        return products;
+        return this.productsData.items;
       }
 
       return [];
@@ -72,12 +69,20 @@ export default {
       return this.productsData ? this.productsData.pagination.total : 0;
     },
     filtration() {
-      return {
+      const filtration = {
         categoryId: this.filterData.categoryId > 0 ? this.filterData.categoryId : null,
-        colorId: this.filterData.color,
-        minPrice: this.filterData.priceFrom,
-        maxPrice: this.filterData.priceTo >= this.filterData.priceFrom ? this.filterData.priceTo : null,
+        minPrice: this.filterData.priceFrom > 0 ? this.filterData.priceFrom : null,
+        maxPrice: this.filterData.priceTo > 0
+          && this.filterData.priceTo >= this.filterData.priceFrom ? this.filterData.priceTo : null,
       };
+
+      if (Object.keys(this.filterData.props).length > 0) {
+        Object.keys(this.filterData.props).forEach((key) => {
+          filtration[`props[${key}]`] = this.filterData.props[key];
+        });
+      }
+
+      return filtration;
     },
     pagination() {
       return {

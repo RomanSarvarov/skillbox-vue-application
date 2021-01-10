@@ -54,7 +54,11 @@ export default {
     paginate(page) {
       if (page >= 1 && page <= this.pages) {
         this.$emit('update:page', page);
+        this.scrollToTop();
       }
+    },
+    scrollToTop() {
+      window.scrollTo(0, 0);
     },
     isCurrentPage(pageNumber) {
       return pageNumber === this.page;

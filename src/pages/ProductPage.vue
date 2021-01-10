@@ -24,7 +24,7 @@
     <section class="item">
       <div class="item__pics pics">
         <div class="pics__wrapper">
-          <img width="570" height="570" v-if="product.image" :src="product.image.file.url" :alt="product.title">
+          <img width="570" height="570" v-if="product.preview" :src="product.preview.file.url" :alt="product.title">
         </div>
       </div>
 
@@ -36,15 +36,15 @@
         <div class="item__form">
           <form class="form" method="POST" @submit.prevent="addToCart">
             <b class="item__price">
-              {{ numberFormat.price(renderValue(['product', 'price'], 0)) }} ₽
+              {{ numberHelper.price(renderValue(['product', 'price'], 0)) }} ₽
             </b>
 
             <fieldset class="form__block" v-if="product.colors">
               <legend class="form__legend">Цвет:</legend>
 
               <ProductColors
-                  :colors="product.colors"
-                  v-model:current-color="color"
+                v-model="color"
+                :colors="product.colors"
               />
             </fieldset>
 
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-import PageLoading from '@/mixins/page-loading';
+import PageLoading from '@/mixins/page-loading.mixin';
 import ProductColors from '@/components/products/ProductColors';
 import ProductAmount from '@/components/products/ProductAmount';
 import { mapMutations, mapState, mapActions } from 'vuex';

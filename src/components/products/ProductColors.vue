@@ -3,7 +3,7 @@
     <li class="colors__item" v-for="color in colors" :key="color.id">
       <label class="colors__label">
         <input
-          v-model="selected"
+          v-model="currentColor"
           class="colors__radio sr-only"
           type="radio"
           :value="color.id"
@@ -16,16 +16,27 @@
 
 <script>
 export default {
-  props: ['currentColor', 'colors'],
+  props: ['modelValue', 'colors'],
+  emits: ['update:modelValue'],
   computed: {
-    selected: {
+    currentColor: {
       set(color) {
-        this.$emit('update:currentColor', color);
+        this.$emit('update:modelValue', color);
       },
       get() {
-        return this.currentColor;
+        return this.modelValue;
       },
     },
+    firstColor() {
+      return this.colors.length > 0
+        ? this.colors[0]
+        : null;
+    },
+  },
+  created() {
+    this.currentColor = this.firstColor
+      ? this.firstColor.id
+      : null;
   },
 };
 </script>
